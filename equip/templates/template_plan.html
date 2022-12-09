@@ -1,0 +1,22 @@
+{% for line in content %}
+<div class="accordion-item">
+    <h2 class="accordion-header" id="heading_{{ substr }}{{ loop.index0 }}">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_{{ substr }}{{ loop.index0 }}" aria-expanded="false" aria-controls="collapse_{{ substr }}{{ loop.index0 }}">
+            Запланировать тестирование типа {{ line[1] }}
+        </button>
+    </h2>
+    <div id="collapse_{{ substr }}{{ loop.index0 }}" class="accordion-body accordion-collapse collapse"
+         aria-labelledby="heading_{{ substr }}{{ loop.index0 }}" data-bs-parent="#{{ parent }}">
+        <div>
+            {% if line[1] in needed %}
+                <p>Тестирование необходимо</p>
+            {% endif %}
+            <p>Дата последнего теста: </p>
+            <form method="post">
+                <input type="hidden" name="id" value="{{ line[0] }}">
+                <button type="submit">Выбрать</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endfor %}

@@ -1,0 +1,22 @@
+body *, body {
+    background: #222D32 !important;
+    color: #ecf0f1 !important;
+    border-color: #ecf0f1 !important;
+}
+h1, h2 {
+  text-align: center;
+  text-align: center;
+  font-size: 30px;
+  color: #ecf0f1;
+  text-shadow: 2px 2px 4px #000000;
+  font-family: 'Cherry Swash', cursive;
+}
+ ul.list-group p.list-group-item:hover {
+    background-color: #f5f5f5;
+    cursor: pointer;
+}
+ ul.list-group p.list-group-item {
+    padding: 0px;
+    margin: 0px;
+
+}

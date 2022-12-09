@@ -1,0 +1,14 @@
+
+{% extends 'main_menu.html' %}
+
+{% block external_user %}
+{% if has_access('bp_prot.start_prot') %}
+    <a href="{{ url_for('bp_prot.start_prot') }}">Протоколы</a>
+{% endif %}
+{% if has_access('bp_equip.start_equip') %}
+    <a href="{{ url_for('bp_equip.start_equip') }}">Оборудование</a>
+{% endif %}
+{% if has_access('bp_staff.start_staff') %}
+    <a href="{{ url_for('bp_staff.start_staff') }}">Персонал</a>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,13 @@
+{
+  "hr": [
+    "bp_prot",
+    "bp_staff"
+  ],
+  "product_manager": [
+    "bp_equip",
+    "bp_prot"
+  ],
+  "external": [
+    "bp_equip"
+  ]
+}

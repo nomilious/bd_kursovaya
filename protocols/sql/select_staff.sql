@@ -1,0 +1,1 @@
+SELECT div_code, FIO FROM staff

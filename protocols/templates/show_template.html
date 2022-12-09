@@ -1,0 +1,18 @@
+{% for line in content %}
+<div class="accordion-item">
+    <h2 class="accordion-header" id="heading_{{ substr }}{{ loop.index0 }}">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_{{ substr }}{{ loop.index0 }}" aria-expanded="false" aria-controls="collapse_{{ substr }}{{ loop.index0 }}">
+            Отчет от {{ line[0] }} по оборудованию  {{ line[3] }}
+        </button>
+    </h2>
+    <div id="collapse_{{ substr }}{{ loop.index0 }}" class="accordion-body accordion-collapse collapse"
+         aria-labelledby="heading_{{ substr }}{{ loop.index0 }}" data-bs-parent="#{{ parent }}">
+        <div>
+            <p>Ответственный: {{ line[2] }}</p>
+            {% if line[1] is not none %}
+                <p>Статус: {{ line[1] }}</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endfor %}

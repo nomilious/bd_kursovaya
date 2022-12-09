@@ -1,0 +1,1 @@
+Select outt.type, outt.title from (select * from equipment join equipment_type on eq_t=id_t) outt

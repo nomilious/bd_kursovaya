@@ -1,0 +1,17 @@
+{% for type in content.keys() %}
+<div class="accordion-item">
+    <h2 class="accordion-header" id="heading_{{ substr }}{{ loop.index0 }}">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_{{ substr }}{{ loop.index0 }}" aria-expanded="false" aria-controls="collapse_{{ substr }}{{ loop.index0 }}">
+            {{ type }}
+        </button>
+    </h2>
+    <div id="collapse_{{ substr }}{{ loop.index0 }}" class="accordion-body accordion-collapse collapse"
+         aria-labelledby="heading_{{ substr }}{{ loop.index0 }}" data-bs-parent="#{{ parent }}">
+        <ul class="list-group">
+            {% for val in content[type] %}
+            <p class="list-group-item" onclick="{{ func }}"> {{ val }} </p>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endfor %}
