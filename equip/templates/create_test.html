@@ -18,8 +18,6 @@
             <span style><b>Записать</b></span>
             <span style="color: aqua !important;"> тестирование: </span>
             <span style="color: green !important;"> {{ line[2] }} </span>
-            <span style="color: aqua !important;"> следующего числа: </span>
-            <span style="color: green !important;"> {{ line[5] }} </span>
             <form method="post" action="">
                 <input type="hidden" name="protocol_id" value="{{ line[0] }}">
                 <input type="hidden" name="id_tt" value="{{ line[4] }}">
@@ -34,13 +32,20 @@
         <form action="" method="post">
             {% for i in session.get('basket').keys() %}
             <label>{{ session['basket'][i]['title'] }}</label>
-                <input style="width: 150px;" type="text" name="{{ session.get('basket')[i]['id'] }}" value="1"
-                        pattern="[01]{1,7}" minlength="1" maxlength="7" value="0">
+            <input style="width: 150px;" type="text" name="{{ session.get('basket')[i]['id'] }}" value="1"
+                   pattern="[01]{1,7}" minlength="1" maxlength="7" value="0">
             <br>
+            <select name="day">
+                {% for i in test_day %}
+                <option></option>
+                {% endfor %}
+            </select>
             {% endfor %}
-
-            <button><a href="{{url_for('bp_equip.clear_basket', redirect_to='bp_equip.create_test')}}">Очистить</a></button>
+            <button><a href="{{url_for('bp_equip.clear_basket', redirect_to='bp_equip.create_test')}}">Очистить</a>
+            </button>
             <button type="submit">Отправить</button>
+            <button type="submit">Добавить еще тест</button>
+
         </form>
         {% endif %}
     </div>
