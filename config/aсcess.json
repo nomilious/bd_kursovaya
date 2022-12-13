@@ -5,7 +5,6 @@
   ],
   "product_manager": [
 	"bp_equip.plan_test",
-	"bp_equip.show_tests",
 	"bp_equip.start_equip",
 	"bp_prot"
   ],

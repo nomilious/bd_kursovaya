@@ -8,20 +8,15 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='style_proto.css') }}">
 </head>
 <body>
-<h2>Просмотр открытых отчетов</h2>
+<h2>Планирование тестирования оборудования.</h2>
 <center>
     <a href="{{ url_for('bp_equip.start_equip') }}"> Нажмите для возврата в меню оборудования.</a>
     <br><br><br>
     <div class="center col-md-8">
-        <div class="accordion" id="accordion_choose">
-            <div class="accordion-item">
-                <div class="accordion" id="accordion_show_opened2">
-                    {% with substr = 'o2_proto_', parent = "accordion_show_opened2",
-                    func = "", content = types %}
-                    {% include 'template_plan.html' %}
-                    {% endwith %}
-                </div>
-            </div>
+        <div class="accordion" id="accordion_show_opened2">
+            {% with parent = "accordion_show_opened2" %}
+            {% include 'template_plan.html' %}
+            {% endwith %}
         </div>
 
         {% if session.get('basket') is not none %}
@@ -29,41 +24,61 @@
         <hr>
         <h4>Итог:</h4>
         <form action="{{ url_for('bp_equip.save_basket') }}" method="post">
-            <table class="table table-striped table-hover">
-                <thead>
-                <tr>
-                    <th>Наименование</th>
-                    <th>Тип теста</th>
-                    <th>Дата проведения</th>
-                </tr>
-                </thead>
-                <tbody>
+            <div class="container">
+                <div class="row">
+                    <div class="col"><span class="fw-bold">Название</span></div>
+                    <div class="col"><span class="fw-bold">Тип теста</span></div>
+                    <div class="col"><span class="fw-bold">Дата проведения</span></div>
+                </div>
                 {% for i in session.get('basket').keys() %}
-                {% for j in range(session.get('basket')[i]['amount']) %}
-                <tr>
-                    <td>{{ session.get('basket')[i]['title'] }}</td>
-                    <td>
-                        <select style="padding:10px;" class="form-control">
-                            {% for option in select[session.get('basket')[i]['id']] %}
+                {% for j in range(session.get('basket')[i]['count']) %}
+                <div class="row">
+                    <div class="col"><span class="form-control">{{ session.get('basket')[i]['title'] }}</span></div>
+                    <div class="col">
+                        <select name="test_type" class="form-control">
+                            {% for option in select[session.get('basket')[i]['t_id']] %}
                             <option value="{{ option }}">{{ option }}</option>
                             {% endfor %}
                         </select>
-                    </td>
-                    <td>
-                        <input class="form-control" type="date" id="start" name="trip-start" min="{{ min_date }}"
-                               value="{{ min_date }}"></td>
-                </tr>
+                    </div>
+                    <div class="col">
+                        <input class="form-control" style="padding-bottom:0px!important;" type="date" name="test_date"
+                               min="{{ min_date }}" value="{{ min_date }}">
+                    </div>
+                </div>
+                <input type="hidden" name="protocol_id" value="{{ i }}">
+                <input type="hidden" name="eq_t" value="{{ session.get('basket')[i]['t_id'] }}">
                 {% endfor %}
                 {% endfor %}
-                </tbody>
-            </table>
+            </div>
+            <br>
             <button class="btn" type="button">
                 <a href="{{url_for('bp_equip.clear_basket', redirect_to='bp_equip.plan_test')}}">Очистить</a>
             </button>
-            <button class="btn" type="submit">Запланировать</button>
+            <button class="btn" type="button" onclick="submitForm()">Запланировать</button>
         </form>
         {% endif %}
     </div>
 </center>
+<script>
+    function checker() {
+        let date = document.getElementsByName('test_date');
+        for (let i = 0; i < date.length; i++) {
+            for (let j = i + 1; j < date.length; j++) {
+                if (date[i].value === date[j].value) {
+                    alert('В один день не может быть нескольких тестов!');
+                    return 1;
+                }
+            }
+        }
+        return 0;
+    }
+    function submitForm() {
+        if (checker() === 0) {
+            document.getElementsByTagName('form')[1].submit();
+        }
+    }
+
+</script>
 </body>
 </html>

@@ -1,7 +1,5 @@
 import time
 
-import numpy as np
-
 from access import *
 from db_work import *
 from sql_provider import *
@@ -45,23 +43,20 @@ def show_tests():
 @group_required
 def plan_test():
     select_v = {}
-    sql = provider.get("select_types.sql")
-    content = select(current_app.config ['db_config'], sql) [1]
-    sql = provider.get("select_opened_proto.sql")
-    o = select(current_app.config ['db_config'], sql) [1]
-    res = np.array(o) [:, -3]
+    sql = provider.get("select_totest.sql")
+    content = select(current_app.config['db_config'], sql)[1]
 
     if request.method == 'POST':
-        input = request.form.get("id")
-        title = dict(content) [int(input)]
-        select_v = list(select(current_app.config ['db_config'], provider.get("select_test_types.sql")) [1])
-        select_v = transform_to_dict(select_v)
-        add_to_basket(int(input), title)
+        protocol_id = request.form.get("protocol_id")
+        title = request.form.get("title")
+        eq_t = request.form.get("eq_t")
+        add_to_basket(protocol_id, title, eq_t)
+        select_v = transform_to_dict(
+            list(select(current_app.config['db_config'], provider.get("select_test_types.sql"))[1])
+            )
     else:
         clear_basket('bp_equip.plan_test')
-    return render_template("plan_test.html", needed = np.unique(res), min_date = time.strftime('%Y-%m-%d'),
-                           types = content, select = select_v
-                           )
+    return render_template("plan_test.html", min_date = time.strftime('%Y-%m-%d'), content = content, select = select_v)
 
 
 @bp_equip.route("/clear_basket")
@@ -73,31 +68,44 @@ def clear_basket(redirect_to: str = ''):
     return redirect(url_for(request.args ['redirect_to']))
 
 
-@bp_equip.route("/save_basket")
-def save_basket(proc: str = ""):
+@bp_equip.route("/save", methods = ['POST'])
+def save_basket():
     if 'basket' not in session:
         return render_template('fail.html')
-    if proc == "":
-        proc = request.args ['proc']
-    for num in session ['basket']:
-        call_proc(current_app.config ['db_config'], proc, int(num))
-    del session ['basket']
+    ids = request.form.getlist('protocol_id')
+    types = request.form.getlist('test_type')
+    dates = request.form.getlist('test_date')
+    eqtypes = request.form.getlist('eq_t')
+    for i in range(len(ids)):
+        call_proc(current_app.config['db_config'], 'plan_test', int(eqtypes[i]), int(ids[i]), types[i], dates[i])
+    del session['basket']
     return render_template("success.html")
 
 
-def add_to_basket(id, title: str):
+@bp_equip.route("/save_results", methods = ['POST'])
+def save_results():
+    if 'basket' not in session:
+        return render_template('fail.html')
+    ids = request.form.getlist('id')
+    statuses = request.form.getlist('status')
+    for i in range(len(ids)):
+        res = call_proc(current_app.config['db_config'], 'create_test', int(statuses[i]), int(ids[i]))
+        print(res)
+    return render_template("success.html")
+
+
+def add_to_basket(id: str, title: str, eq_t: int):
     curr_basket = session.get('basket', {})
-    if str(id) in curr_basket:
-        curr_basket [str(id)] ['amount'] += 1
-    else:
-        curr_basket [str(id)] = {
-            'id': str(id),
+    if id not in curr_basket:
+        curr_basket[id] = {
+            'id': id,
+            't_id': eq_t,
             'title': title,
-            'amount': 1,
-            'dates': [],
-            'types': []
+            'count': 1
         }
-    session ['basket'] = curr_basket
+    else:
+        curr_basket[id]['count'] += 1
+    session['basket'] = curr_basket
     session.permanent = True
     return True
 
@@ -108,34 +116,38 @@ def transform_to_dict(a):
         if str(line [0]) not in res:
             res [str(line [0])] = [line [1]]
         else:
-            res [str(line [0])].append(line [1])
+            res[str(line[0])].append(line[1])
     return res
 
 
 def save_tests(pattern, protocol_id, id_tt):
     for status in pattern:
-        call_proc(current_app.config ['db_config'], 'create_test', int(status), protocol_id, id_tt)
+        call_proc(current_app.config['db_config'], 'create_test', int(status), protocol_id, id_tt)
     return True
+
+
+def transform_grouped(o):
+    res = {}
+    for line in o:
+        if line[-1] not in res:
+            res[line[-1]] = [line]
+        else:
+            res[line[-1]].append(line)
+    return res
 
 
 @bp_equip.route("/create", methods = ['GET', 'POST'])
 @login_required
-@group_required
 def create_test():
     ttest_day = ""
     if request.method == 'GET':
         if 'basket' in session:
-            del session ['basket']
+            del session['basket']
     else:
-        if "title" not in request.form:
-            for id in request.form:
-                save_tests(request.form.get(id), *list(map(int, id.split())))
-            return render_template("success.html")
         protocol_id = request.form.get("protocol_id")
-        id_tt = request.form.get("id_tt")
+        id = request.form.get("id")
         title = request.form.get("title")
-        id = f"{protocol_id} {id_tt}"
-        add_to_basket(id, title)
-        _, ttest_day = select_showp(current_app.config ['db_config'], provider.get("select_ttest_day.sql"))
-    _, o = select_showp(current_app.config ['db_config'], provider.get("select_ttest.sql"))
-    return render_template("create_test.html", content = o, day_test = ttest_day)
+        add_to_basket(id, title, protocol_id)
+        # _, ttest_day = select_showp(current_app.config ['db_config'], provider.get("select_ttest_day.sql"))
+    o = select(current_app.config['db_config'], provider.get("select_ttest.sql"))[1]
+    return render_template("create_test.html", content = transform_grouped(o), day_test = ttest_day)

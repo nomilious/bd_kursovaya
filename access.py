@@ -1,5 +1,6 @@
-from flask import *
 from functools import wraps
+
+from flask import *
 
 
 def login_required(func):
@@ -16,9 +17,6 @@ def group_validation(config: dict) -> bool:
     endpoint_app = request.endpoint.split('.')[0] # имя blueprint'a
     if 'user_group' in session:
         user_group = session['user_group']
-        print(f"You are {user_group}")
-        print(f"Needed  {endpoint_func} or {endpoint_app}")
-        print(f"Rights {config[user_group]}")
         if user_group in config and endpoint_app in config[user_group]:
             return True
         elif user_group in config and endpoint_func in config[user_group]:

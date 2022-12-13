@@ -1,23 +1,25 @@
 {% for line in content %}
+{% if line[0]|string not in session['basket'] %}
 <div class="accordion-item">
     <h2 class="accordion-header" id="heading{{ loop.index0 }}">
         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                 data-bs-target="#collapse{{ loop.index0 }}" aria-expanded="false"
                 aria-controls="collapse{{ loop.index0 }}">
-            Запланировать тестирование {{ line[0] }}
+            {{ line[2] }}
         </button>
     </h2>
     <div id="collapse{{ loop.index0 }}" class="accordion-body accordion-collapse collapse"
          aria-labelledby="heading{{ loop.index0 }}" data-bs-parent="#{{ parent }}">
         <div>
-            <p>Для протокола №{{ line[2] }} от {{ line[3] }} </p>
+            <p>Для протокола №{{ line[1] }} от {{ line[3] }} </p>
             <form method="post">
-                <input type="hidden" name="title" value="{{ line[0] }}">
-                <input type="hidden" name="eq_t" value="{{ line[1] }}">
-                <input type="hidden" name="protocol_id" value="{{ line[2] }}">
+                <input type="hidden" name="title" value="{{ line[2] }}">
+                <input type="hidden" name="id" value="{{ line[0] }}">
+                <input type="hidden" name="protocol_id" value="{{ line[1] }}">
                 <button class="btn" type="submit">Выбрать</button>
             </form>
         </div>
     </div>
 </div>
+{% endif %}
 {% endfor %}

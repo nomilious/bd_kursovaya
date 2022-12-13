@@ -1,6 +1,6 @@
-select  tp.id_p, tp.date_t, e.title, e.eq_t
-from test_protocol tp
-	left join list_of_testing  lot on tp.id_p = lot.protocol_id
+select lot.id, lot.protocol_id, tt.name_tt, lot.date_test, e.title
+from list_of_testing lot
+	join type_tests tt on tt.id_tt = lot.id_test_type
+	join test_protocol tp on tp.id_p = lot.protocol_id
 	join equipment e on e.id_l = tp.id_eq
-	join equipment_type et on et.id_t = e.eq_t
-where lot.protocol_id is null;
+where lot.status is null
