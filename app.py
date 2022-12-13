@@ -50,7 +50,7 @@ def has_access(bp):
 @app.route('/', methods = ['GET', 'POST'])
 @login_required
 def main_menu():
-    content ['subtitle'] = f"Вы вошли в систему как {session ['user_group'].upper()}",
+    content ['subtitle'] = f"Вы вошли в систему как {session ['user_group'].upper()}"
     return render_template('make_index.html', content = content)
 
 
@@ -64,6 +64,3 @@ def exit():
 if __name__ == '__main__':
     app.run(host="127.0.0.1", port=5001)
 #внешний пользователь - тестировщик. только составление тесты. такое-то оборудование. в такойто день тестируется.
-# показать
-#TODO создать процедуру которая инсертит в ttest_date_plan. на сайте показать нужный протокол тестирования
-#TODO создать процедуру которая инсертит в ttest_date_plan

@@ -1,0 +1,1 @@
+SELECT id_t, name_tt FROM type_tests

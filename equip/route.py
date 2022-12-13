@@ -1,4 +1,6 @@
-# import numpy as np
+import time
+
+import numpy as np
 
 from access import *
 from db_work import *
@@ -42,22 +44,27 @@ def show_tests():
 @login_required
 @group_required
 def plan_test():
-    content = "Select * from equipment_type"
-    content = select(current_app.config ['db_config'], content) [1]
+    select_v = {}
+    sql = provider.get("select_types.sql")
+    content = select(current_app.config ['db_config'], sql) [1]
     sql = provider.get("select_opened_proto.sql")
-    o, _ = select_showp(current_app.config ['db_config'], sql)
-    res = np.array(o)
+    o = select(current_app.config ['db_config'], sql) [1]
+    res = np.array(o) [:, -3]
+
     if request.method == 'POST':
         input = request.form.get("id")
         title = dict(content) [int(input)]
+        select_v = list(select(current_app.config ['db_config'], provider.get("select_test_types.sql")) [1])
+        select_v = transform_to_dict(select_v)
         add_to_basket(int(input), title)
     else:
         clear_basket('bp_equip.plan_test')
-    return render_template("plan_test.html", needed = np.unique(res [:, -3]), types = content)
+    return render_template("plan_test.html", needed = np.unique(res), min_date = time.strftime('%Y-%m-%d'),
+                           types = content, select = select_v
+                           )
 
 
 @bp_equip.route("/clear_basket")
-@group_required
 def clear_basket(redirect_to: str = ''):
     if 'basket' in session:
         del session ['basket']
@@ -67,7 +74,6 @@ def clear_basket(redirect_to: str = ''):
 
 
 @bp_equip.route("/save_basket")
-@group_required
 def save_basket(proc: str = ""):
     if 'basket' not in session:
         return render_template('fail.html')
@@ -81,18 +87,29 @@ def save_basket(proc: str = ""):
 
 def add_to_basket(id, title: str):
     curr_basket = session.get('basket', {})
-    if str(id) not in curr_basket:
-        curr_basket [str(id)] ['amount'] += curr_basket [prod_id] ['amount'] + 1
+    if str(id) in curr_basket:
+        curr_basket [str(id)] ['amount'] += 1
     else:
         curr_basket [str(id)] = {
             'id': str(id),
             'title': title,
             'amount': 1,
-            'status': []
+            'dates': [],
+            'types': []
         }
     session ['basket'] = curr_basket
     session.permanent = True
     return True
+
+
+def transform_to_dict(a):
+    res = {}
+    for line in a:
+        if str(line [0]) not in res:
+            res [str(line [0])] = [line [1]]
+        else:
+            res [str(line [0])].append(line [1])
+    return res
 
 
 def save_tests(pattern, protocol_id, id_tt):

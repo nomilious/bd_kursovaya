@@ -4,10 +4,14 @@
     "bp_staff"
   ],
   "product_manager": [
-    "bp_equip",
-    "bp_prot"
+	"bp_equip.plan_test",
+	"bp_equip.show_tests",
+	"bp_equip.start_equip",
+	"bp_prot"
   ],
   "external": [
-    "bp_equip"
+	"bp_equip.start_equip",
+	"bp_equip.show_tests",
+	"bp_equip.create_test"
   ]
 }

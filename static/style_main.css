@@ -1,6 +1,5 @@
 body {
     background: #222D32 !important;
-    font-family: 'Roboto', sans-serif;
 }
 nav {
   margin-top: 100px;
@@ -36,10 +35,10 @@ nav .animation {
   border-radius: 8px;
 }
 a {
-  width: 170px;
+  width: 300px;
 }
 nav .start-home, a:hover~.animation {
-  width: 170px;
+  width: 300px;
 }
 
 nav .start-home, a:nth-child(1):hover~.animation {
