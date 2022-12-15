@@ -57,8 +57,7 @@ nav .start-blog, a:nth-child(4):hover~.animation {
   top: 150px;
   background-color: #9b59b6;
 }
-h1 {
-  text-align: center;
+h1, label, h4 {
   margin: 40px 0 40px;
   text-align: center;
   font-size: 30px;

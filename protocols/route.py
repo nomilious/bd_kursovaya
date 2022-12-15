@@ -44,7 +44,7 @@ def prot_create():
         return render_template("prot_create.html", content = content, content_staff = content_staff)
     else:
         title = request.form.get("equipment").strip()
-        name = request.form.get("staff").strip()
+        name = request.form.get("report").strip()
         if name and title:
             call_proc(current_app.config ['db_config'], 'create_protocol', title, name)
             return render_template("success.html")

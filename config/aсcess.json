@@ -1,7 +1,7 @@
 {
-  "hr": [
+  "spokesman": [
     "bp_prot",
-    "bp_staff"
+    "bp_report"
   ],
   "product_manager": [
 	"bp_equip.plan_test",

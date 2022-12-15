@@ -1,7 +1,7 @@
 from auth.route import *
 from equip.route import *
 from protocols.route import *
-from staff.route import *
+from report.route import *
 
 app = Flask(__name__, template_folder = "templates", static_folder = "static")
 app.secret_key = "You will never guess"
@@ -9,7 +9,7 @@ app.secret_key = "You will never guess"
 app.register_blueprint(bp_prot, url_prefix = '/prot')
 app.register_blueprint(bp_auth, url_prefix = '/auth')
 app.register_blueprint(bp_equip, url_prefix = '/equip')
-app.register_blueprint(bp_staff, url_prefix = '/staff')
+app.register_blueprint(bp_report, url_prefix = '/report')
 
 content = {
     "page_title": "Главное меню ИС",
@@ -18,7 +18,7 @@ content = {
     "menu": {
         "Протоколы": 'bp_prot.start_prot',
         "Оборудование": 'bp_equip.start_equip',
-        "Персонал": 'bp_staff.start_staff',
+        "Работа с отчетами": 'bp_report.start_report',
     },
     'allowed': {
         "Выход": 'exit'

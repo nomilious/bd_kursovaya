@@ -1,3 +1,4 @@
 flask>=2.2.0
 cryptography>=38.0.3
 blueprint>=3.4.2
+pymysql >= 1.0.2
