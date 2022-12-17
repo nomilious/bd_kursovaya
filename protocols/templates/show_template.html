@@ -12,6 +12,12 @@
             {% if line[1] is not none %}
                 <p>Статус: {{ line[1] }}</p>
             {% endif %}
+            {% if button == 1 %}
+            <form method="post">
+                <input type="hidden" name="id" value="{{ line[4] }}" hidden>
+                <button type="submit" class="btn btn-primary">Закрыть</button>
+            </form>
+            {% endif %}
         </div>
     </div>
 </div>

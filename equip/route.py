@@ -1,5 +1,4 @@
 import time
-
 from access import *
 from db_work import *
 from sql_provider import *
@@ -12,7 +11,7 @@ content = {
     "title": "Ваши доступные действия",
     "subtitle": "Работа с оборудованием",
     'menu': {
-        "Показать открытые отчеты": 'bp_equip.show_tests',
+        "Показать открытые протоеолы": 'bp_equip.show_tests',
         "Запланировать тесты": 'bp_equip.plan_test',
         "Создать тесты": 'bp_equip.create_test'
     },
@@ -20,8 +19,6 @@ content = {
         "Возврат в главное меню": 'main_menu'
     }
 }
-
-
 @bp_equip.route('/')
 @login_required
 @group_required
@@ -35,7 +32,7 @@ def start_equip():
 def show_tests():
     sql = provider.get("select_opened_proto.sql")
     o, _ = select_showp(current_app.config ['db_config'], sql)
-    return render_template("show_test.html", opened = o)
+    return render_template("show.html", opened = o)
 
 
 @bp_equip.route("/plan", methods = ['GET', 'POST'])
@@ -148,6 +145,5 @@ def create_test():
         id = request.form.get("id")
         title = request.form.get("title")
         add_to_basket(id, title, protocol_id)
-        # _, ttest_day = select_showp(current_app.config ['db_config'], provider.get("select_ttest_day.sql"))
     o = select(current_app.config['db_config'], provider.get("select_ttest.sql"))[1]
     return render_template("create_test.html", content = transform_grouped(o), day_test = ttest_day)
