@@ -2,11 +2,7 @@ SELECT
 	eq_id,
     title,
     protocol_id,
-    status,
-    test_cnt,
-    good_cnt,
-    FIO,
-    id_s
+    status
 FROM REPORTS_EQUIPMENT
 	join REPORT_DATES on report_date_id = REPORT_DATES.id
 where year = "$in_year"

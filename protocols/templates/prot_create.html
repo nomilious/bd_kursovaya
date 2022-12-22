@@ -12,11 +12,26 @@
 <center>
     <h2>Создание отчета</h2>
     <br>
-    <form method="post">
-        <input type="text" name="equipment" readonly="readonly">
-        <input type="text" name="staff" readonly="readonly">
+    <div class="col-sm-8">
+        <form method="post">
+        <div class="row">
+            <div class="col">
+                <input style="padding-bottom:14px;" type="text" class="form-control" name="equipment"
+                       readonly="readonly"
+                       placeholder="Выберите оборудование">
+            </div>
+            <div class="col">
+                <input style="padding-bottom:14px;" type="text" class="form-control"  name="staff" readonly="readonly"
+                       placeholder="Выберите сотрудника">
+            </div>
+            <div class="col">
+                <input type="date" class="form-control"  name="date" min="{{ min_date }}" value="{{ min_date }}">
+            </div>
+        </div>
+            <br>
         <button type="submit">Отправить</button>
     </form><br><br>
+    </div>
     <div class="col-md-4">
         <div class="accordion" id="accordion_choose">
             <div class="accordion-item">

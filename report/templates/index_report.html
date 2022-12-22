@@ -27,8 +27,8 @@
         {% for report in report_list %}
         <form action='' method = 'POST'>
             <label for="create_rep" class="named_list">{{report['rep_name']}}</label>
-            <input type="submit" name="create_rep" id="create_rep" value="create">
-            <input type="submit" name="view_rep" id="view_rep" value="view">
+            <input type="submit" name="create_rep" id="create_rep" value="создать">
+            <input type="submit" name="view_rep" id="view_rep" value="посмотреть">
             <input type="hidden" name="rep_id" value="{{report['rep_id']}}">
         </form>
         {% endfor %}

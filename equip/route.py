@@ -1,4 +1,3 @@
-import time
 from access import *
 from db_work import *
 from sql_provider import *
@@ -53,7 +52,7 @@ def plan_test():
             )
     else:
         clear_basket('bp_equip.plan_test')
-    return render_template("plan_test.html", min_date = time.strftime('%Y-%m-%d'), content = content, select = select_v)
+    return render_template("plan_test.html", content = content, select = select_v)
 
 
 @bp_equip.route("/clear_basket")
@@ -71,10 +70,9 @@ def save_basket():
         return render_template('fail.html')
     ids = request.form.getlist('protocol_id')
     types = request.form.getlist('test_type')
-    dates = request.form.getlist('test_date')
     eqtypes = request.form.getlist('eq_t')
     for i in range(len(ids)):
-        call_proc(current_app.config['db_config'], 'plan_test', int(eqtypes[i]), int(ids[i]), types[i], dates[i])
+        call_proc(current_app.config['db_config'], 'plan_test', int(eqtypes[i]), int(ids[i]), types[i])
     del session['basket']
     return render_template("success.html")
 

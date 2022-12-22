@@ -3,7 +3,7 @@ from flask import *
 from access import group_required
 from db_work import *
 from sql_provider import *
-
+import time
 bp_prot = Blueprint('bp_prot', __name__, template_folder = 'templates', static_folder = "../static")
 provider = SQLProvider(os.path.join(os.path.dirname(__file__), "sql"))
 
@@ -42,12 +42,13 @@ def prot_create():
         content = select_createp(current_app.config ['db_config'], sql)
         sql = provider.get("select_staff.sql")
         content_staff = select_createp(current_app.config ['db_config'], sql)
-        return render_template("prot_create.html", content = content, content_staff = content_staff)
+        return render_template("prot_create.html", content = content, content_staff = content_staff, min_date = time.strftime('%Y-%m-%d'))
     else:
         title = request.form.get("equipment").strip()
         name = request.form.get("staff").strip()
+        date = request.form.get("date").strip()
         if name and title:
-            call_proc(current_app.config ['db_config'], 'create_protocol', title, name)
+            call_proc(current_app.config ['db_config'], 'create_protocol', title, name, date)
             return render_template("success.html")
         return render_template("fail.html")
 

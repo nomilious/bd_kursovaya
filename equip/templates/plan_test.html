@@ -28,7 +28,6 @@
                 <div class="row">
                     <div class="col"><span class="fw-bold">Название</span></div>
                     <div class="col"><span class="fw-bold">Тип теста</span></div>
-                    <div class="col"><span class="fw-bold">Дата проведения</span></div>
                 </div>
                 {% for i in session.get('basket').keys() %}
                 {% for j in range(session.get('basket')[i]['count']) %}
@@ -41,10 +40,6 @@
                             {% endfor %}
                         </select>
                     </div>
-                    <div class="col">
-                        <input class="form-control" style="padding-bottom:0px!important;" type="date" name="test_date"
-                               min="{{ min_date }}" value="{{ min_date }}">
-                    </div>
                 </div>
                 <input type="hidden" name="protocol_id" value="{{ i }}">
                 <input type="hidden" name="eq_t" value="{{ session.get('basket')[i]['t_id'] }}">
@@ -55,30 +50,10 @@
             <button class="btn" type="button">
                 <a href="{{url_for('bp_equip.clear_basket', redirect_to='bp_equip.plan_test')}}">Очистить</a>
             </button>
-            <button class="btn" type="button" onclick="submitForm()">Запланировать</button>
+            <button class="btn" type="submit">Запланировать</button>
         </form>
         {% endif %}
     </div>
 </center>
-<script>
-    function checker() {
-        let date = document.getElementsByName('test_date');
-        for (let i = 0; i < date.length; i++) {
-            for (let j = i + 1; j < date.length; j++) {
-                if (date[i].value === date[j].value) {
-                    alert('В один день не может быть нескольких тестов!');
-                    return 1;
-                }
-            }
-        }
-        return 0;
-    }
-    function submitForm() {
-        if (checker() === 0) {
-            document.getElementsByTagName('form')[1].submit();
-        }
-    }
-
-</script>
 </body>
 </html>
