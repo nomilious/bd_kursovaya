@@ -4,7 +4,9 @@
 ### Description
 This localhosted site built on Flask framework. 
 It implements a workflow of an equipment testing factory.
-It has user authorization and group access permissions.
+It has 4 blueprits: `auth`, `equip`, `protocols` and `report`. 
+Every user has a group, every type of group has its permissions
+
 ### Goal
 Learn Flask framework, master python skills and built another personal project.
 
